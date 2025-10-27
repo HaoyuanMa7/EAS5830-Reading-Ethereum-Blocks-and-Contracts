@@ -11,14 +11,9 @@ from web3.providers.rpc import HTTPProvider
 # infura_url = f"https://mainnet.infura.io/v3/{infura_token}"
 
 def connect_to_eth():
-	# Connect to Ethereum mainnet using an RPC provider
-	# You need to replace this with your actual API key/URL
-	# Example providers:
-	# now_url  = f"https://eth.nownodes.io/{now_token}"
-	# alchemy_url = f"https://eth-mainnet.alchemyapi.io/v2/{alchemy_token}"
-	# infura_url = f"https://mainnet.infura.io/v3/{infura_token}"
-	
-	url = "https://mainnet.infura.io/v3/YOUR_INFURA_KEY"  # Replace with your actual key
+	# Connect to Ethereum mainnet using MetaMask Infura
+	infura_api_key = "0ac24669f793e58f09cd"
+	url = f"https://mainnet.infura.io/v3/{infura_api_key}"
 	w3 = Web3(HTTPProvider(url))
 	assert w3.is_connected(), "Failed to connect to Ethereum"
 	return w3
