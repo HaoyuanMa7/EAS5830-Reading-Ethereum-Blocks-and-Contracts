@@ -11,27 +11,27 @@ from web3.providers.rpc import HTTPProvider
 # infura_url = f"https://mainnet.infura.io/v3/{infura_token}"
 
 def connect_to_eth():
-	# Connect to Ethereum mainnet using MetaMask Infura
-	infura_api_key = "0ac24669f793e58f09cd"
-	url = f"https://mainnet.infura.io/v3/{infura_api_key}"
+	# Connect to Ethereum mainnet using Infura
+	url = "https://mainnet.infura.io/v3/6a07731338cf4262b3428bd629ab7cfc"
 	w3 = Web3(HTTPProvider(url))
-	assert w3.is_connected(), "Failed to connect to Ethereum"
+	assert w3.is_connected(), f"Failed to connect to provider at {url}"
 	return w3
 
 
 def connect_with_middleware(contract_json):
-	# Connect to BNB testnet with POA middleware for the contract
-	bsc_testnet_url = "https://data-seed-prebsc-1-s1.binance.org:8545/"
-	w3 = Web3(HTTPProvider(bsc_testnet_url))
+	with open(contract_json, "r") as f:
+		d = json.load(f)
+		d = d['bsc']
+		address = d['address']
+		abi = d['abi']
+
+	# Connect to BNB testnet
+	bnb_url = "https://data-seed-prebsc-1-s1.binance.org:8545"
+	w3 = Web3(HTTPProvider(bnb_url))
+	
+	# Inject middleware and create contract
 	w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
-	
-	# Load contract info
-	with open(contract_json, 'r') as f:
-		contract_info = json.load(f)
-	
-	contract_address = contract_info['bsc']['address']
-	contract_abi = contract_info['bsc']['abi']
-	contract = w3.eth.contract(address=contract_address, abi=contract_abi)
+	contract = w3.eth.contract(address=address, abi=abi)
 	
 	return w3, contract
 
